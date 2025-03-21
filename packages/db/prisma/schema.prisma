@@ -1,0 +1,49 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id     String @id @unique
+  videos Video[]
+}
+
+model Video {
+  id                  Int              @id @default(autoincrement())
+  uploadedLink        String
+  mp4_360pLink        String?
+  mp4_480pLink        String?
+  title               String?
+  createdAt           DateTime         @default(now())
+  processingStartedAt DateTime?
+  processingEndedAt   DateTime?
+  status              ProcessingStatus @default(PENDING)
+  userId              String
+  user                User             @relation(fields: [userId], references: [id])
+  validatorId         Int?
+  validator           Validator?       @relation(fields: [validatorId], references: [id])
+}
+
+enum ProcessingStatus {
+  PROCESSING
+  PROCESSED
+  PENDING
+}
+
+model Validator {
+  id             Int     @id @default(autoincrement())
+  publicKey      String  @unique
+  pendingPayouts Int     @default(0)
+  payoutLocked   Boolean @default(false)
+  videos         Video[]
+}

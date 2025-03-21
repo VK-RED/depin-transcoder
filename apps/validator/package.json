@@ -1,0 +1,17 @@
+{
+  "name": "validator",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "@types/fluent-ffmpeg": "^2.1.27",
+    "axios": "^1.8.4",
+    "fluent-ffmpeg": "^2.1.3"
+  }
+}
