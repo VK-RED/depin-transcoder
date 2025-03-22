@@ -7,7 +7,7 @@ import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { randomUUIDv7 } from "bun";
 import type { VideoItem } from "common/types";
 import { redis } from "cache/redis";
-import { clusterApiUrl, Connection, Keypair, PublicKey, SystemProgram, TransactionMessage, VersionedTransaction } from "@solana/web3.js";
+import { clusterApiUrl, Connection, Keypair, LAMPORTS_PER_SOL, PublicKey, SystemProgram, TransactionMessage, VersionedTransaction } from "@solana/web3.js";
 
 const port = process.env.PORT || 8080;
 
@@ -47,7 +47,7 @@ app.post("/api/payout/:publicKey", async (req,res)=>{
 
   if(!publicKey){
     const message = "Public key is required";
-    res.status(400).json({message});
+    res.json({message});
     return;
   }
 
@@ -57,20 +57,28 @@ app.post("/api/payout/:publicKey", async (req,res)=>{
     }
   });
 
+  console.log("Validator", validator);
+
   if(!validator){
-    const message = "Validator not found";
-    res.status(404).json({message});
+    const message = "Validator not found, Please run as a Validator first to get payouts";
+    res.json({message});
+    return;
+  }
+
+  if(validator.pendingPayouts === 0){
+    const message = "No Payouts to process, Run as a Validator to get payouts";
+    res.json({message});
     return;
   }
 
   if(validator.payoutLocked){
     const message = "Payout is locked Please wait for the current payout to complete";
-    res.status(400).json({message});
+    res.json({message, payout:validator.pendingPayouts});
     return;
   }
 
   await redis.lpush("payouts", validator.id)
-  res.json({message:"Payout queued for processing"});
+  res.json({message:`Payout ${validator.pendingPayouts / LAMPORTS_PER_SOL} SOL  queued for processing`, payout:validator.pendingPayouts});
   return;
 })
 

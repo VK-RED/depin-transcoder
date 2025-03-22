@@ -1,7 +1,12 @@
 import Link from "next/link";
-import { Video, Zap, Shield, Globe } from 'lucide-react';
+import { Zap, Globe, BadgeDollarSign } from 'lucide-react';
+import { auth } from "@clerk/nextjs/server";
+import { LandingPageButton } from "./components/LandingPageButton";
 
-export default function Page(){
+export default async function Page(){
+
+  const {userId} = await auth();
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
       {/* Hero Section */}
@@ -15,12 +20,12 @@ export default function Page(){
             Transform your videos with the power of decentralized networks. Fast, secure, and efficient video transcoding for everyone.
           </p>
           <div className="mt-5 max-w-md mx-auto sm:flex sm:justify-center md:mt-8">
-            <Link
+            {userId ? <Link
               href="/dashboard"
               className="flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-3 md:text-lg md:px-6"
             >
               Get Started
-            </Link>
+            </Link> : <LandingPageButton/>}
           </div>
         </div>
       </div>
@@ -41,11 +46,11 @@ export default function Page(){
 
             <div className="flex flex-col items-center text-center">
               <div className="flex items-center justify-center h-12 w-12 rounded-md bg-indigo-500 text-white">
-                <Shield className="h-6 w-6" />
+                <BadgeDollarSign className="h-6 w-6" />
               </div>
-              <h3 className="mt-6 text-lg font-medium text-gray-900">Secure & Private</h3>
+              <h3 className="mt-6 text-lg font-medium text-gray-900">Earn in SOL</h3>
               <p className="mt-2 text-base text-gray-500">
-                Your content is encrypted and processed securely across the network.
+                Run as a Validator and get rewards
               </p>
             </div>
 
