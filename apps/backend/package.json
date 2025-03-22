@@ -19,7 +19,8 @@
     "db": "*",
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
-    "common": "*"
+    "common": "*",
+    "cache": "*"
   },
   "scripts": {
     "start": "bun run src/index.ts"
