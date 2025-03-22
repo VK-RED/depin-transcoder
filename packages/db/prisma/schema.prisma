@@ -14,7 +14,7 @@ datasource db {
 }
 
 model User {
-  id     String @id @unique
+  id     String  @id @unique
   videos Video[]
 }
 
@@ -41,9 +41,20 @@ enum ProcessingStatus {
 }
 
 model Validator {
-  id             Int     @id @default(autoincrement())
-  publicKey      String  @unique
-  pendingPayouts Int     @default(0)
-  payoutLocked   Boolean @default(false)
+  id             Int      @id @default(autoincrement())
+  publicKey      String   @unique
+  pendingPayouts Int      @default(0)
+  payoutLocked   Boolean  @default(false)
   videos         Video[]
+  payouts        Payout[]
+}
+
+model Payout {
+  id          Int       @id @default(autoincrement())
+  amount      Int
+  validatorId Int
+  validator   Validator @relation(fields: [validatorId], references: [id])
+  verified    Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 }
