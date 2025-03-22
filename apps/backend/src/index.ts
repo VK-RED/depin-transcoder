@@ -5,6 +5,7 @@ import { dbClient } from "db/client";
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { randomUUIDv7 } from "bun";
+import type { VideoItem } from "common/types";
 
 const port = process.env.PORT || 8080;
 
@@ -90,9 +91,12 @@ app.post("/api/video", async(req, res)=>{
 app.get("/api/videos", async(req, res)=>{
   
   const userId = req.userId;
-  const videos = await dbClient.video.findMany({
+  const videos: VideoItem[] = await dbClient.video.findMany({
     where:{
       userId
+    },
+    orderBy:{
+      createdAt: "desc"
     }
   });
 

@@ -1,13 +1,3 @@
-
-/**
- * Create a WS client
- * Send a SIGNUP REQUEST
- *  STORE THE VALIDATOR ID
- * 
- * YOU LL RECEIVE THE TRANSCODE REQUEST
- *  PROCESS THE REQUEST
- *  SEND THE TRANSCODE RESULT
- */
 import {type HubPresignedUrlResponse, type SignupRequest, type SignUpResult, type TranscodeRequest, type TranscodeResult, type ValidatorPresignedUrlRequest } from "common/types";
 import { randomUUIDv7 } from "bun";
 import axios, { AxiosError } from "axios";
@@ -115,45 +105,68 @@ async function main(){
         const folderName = arr[arr.length-2];
         
         const response = await axios.get(link,{responseType:"stream"});
-        response.data.pipe(fs.createWriteStream("video.mp4"));
-        
-        console.log("Downloaded the video");
 
-        await new Promise((res, rej) => {
-            ffmpeg("video.mp4")
-            .videoCodec("libx264")
-            .size("640x360")
-            .audioCodec("aac")
-            .outputOptions(["-movflags", "+faststart", "-crf", "18"])
-            .on("error", (err) => {
-                console.log("An error occurred: " + err.message);
-                rej(err);
+        const writer = fs.createWriteStream("video.mp4");
+
+        try {
+            await new Promise((resolve,rej) => {
+                const res = () => {
+                    console.log("Downloaded the video");
+                    resolve("done");
+                }
+                response.data.pipe(writer);
+                writer.on("finish", res);
+                writer.on("error", rej);
             })
-            .on("end", () => {
-                console.log("Finished processing the 360p video");
-                res("Done");
+        } catch (error) {
+            console.log("Error While Downloading the Video");
+            console.log(error);
+        }
+
+
+        try {
+            await new Promise((res, rej) => {
+                ffmpeg("video.mp4")
+                .videoCodec("libx264")
+                .size("640x360")
+                .audioCodec("aac")
+                .outputOptions(["-movflags", "+faststart", "-crf", "18"])
+                .on("error", (err) => {
+                    console.log("An error occurred: " + err.message);
+                    rej(err);
+                })
+                .on("end", () => {
+                    console.log("Finished processing the 360p video");
+                    res("Done");
+                })
+                .save(mp4_360p_video_name);
             })
-            .save(mp4_360p_video_name);
-        })
-        
-        await new Promise((res, rej) => {
-            ffmpeg("video.mp4")
-            .videoCodec("libx264")
-            .size("854x480")
-            .audioCodec("aac")
-            .outputOptions(["-movflags", "+faststart", "-crf", "18"])
-            .on("error", (err) => {
-                console.log("An error occurred: " + err.message);
-                rej(err);
+            
+            await new Promise((res, rej) => {
+                ffmpeg("video.mp4")
+                .videoCodec("libx264")
+                .size("854x480")
+                .audioCodec("aac")
+                .outputOptions(["-movflags", "+faststart", "-crf", "18"])
+                .on("error", (err) => {
+                    console.log("An error occurred: " + err.message);
+                    rej(err);
+                })
+                .on("end", () => {
+                    console.log("Finished processing 480p video");
+                    res("Done");
+                })
+                .save(mp4_480p_video_name);
             })
-            .on("end", () => {
-                console.log("Finished processing 480p video");
-                res("Done");
-            })
-            .save(mp4_480p_video_name);
-        })
-        
-        return {folderName, videoId: data.videoId};
+            
+            return {folderName, videoId: data.videoId};
+
+        } catch (error) {
+            console.log("Error While Processing the Videos");
+            console.log(error);
+
+            return {folderName, videoId};
+        }
 
     }
 

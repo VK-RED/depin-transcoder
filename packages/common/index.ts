@@ -1,3 +1,5 @@
+import type { Prisma } from "db/client";
+
 export type SignupRequest = {
     publicKey: string;
     type : 'Signup'
@@ -43,3 +45,5 @@ export type HubPresignedUrlResponse = {
     type: 'PresignedUrl';
     callbackId: string;
 }
+
+export type VideoItem = Prisma.VideoGetPayload<{}>;

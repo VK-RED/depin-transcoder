@@ -11,56 +11,36 @@ import {
 import axios from 'axios';
 import { useEffect } from 'react';
 import { BACKEND_URL } from '../../constants';
+import { Video, Layout } from 'lucide-react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 export const Navbar = () => {
 
-    const {getToken} = useAuth();
-
-    useEffect(()=>{
-        // sendRequest();
-        sendWsRequest();
-    },[])
-
-    const sendRequest = async () => {
-
-        const token = await getToken();
-
-        if(!token){
-            console.log("No token");
-            return;
-        }
-        console.log("Sending Request");
-        
-        const {data} = await axios.get(`${BACKEND_URL}/api/videos`,{
-            headers:{
-                authorization: token,
-            }
-        });
-        
-    }
-
-    const sendWsRequest = async () => {
-        const wsUrl = "ws://localhost:8081";
-        const ws = new WebSocket(wsUrl);
-
-        ws.onopen = () => {
-            ws.send("Hello from client");
-        }
-
-        ws.onmessage = (event) => {
-            console.log("Received message from server");
-            console.log(event.data);
-        }
-    }
+    const pathName = usePathname();
 
   return (
-    <div className="flex h-16 items-center justify-between bg-white px-4 shadow-sm">
-        <div className="flex items-center space-x-4">
-            <a href="/" className="text-2xl font-bold">
-            Depin Video Transcoder
-            </a>
-        </div>
-        <div className="flex items-center space-x-4">
+    <nav className="bg-white shadow-sm">
+      <div className="mx-auto px-4 sm:px-6 lg:px-12">
+        <div className="flex justify-between h-16">
+          <div className="flex items-center">
+            <Link href="/" className="flex items-center">
+              <Video className="h-8 w-8 text-indigo-600" />
+              <span className="ml-2 text-xl font-bold text-gray-900">DePIN Transcoder</span>
+            </Link>
+          </div>
+          <div className="flex items-center space-x-4">
+            {pathName!== "/dashboard" && 
+                <div className="flex items-center space-x-4">
+                    <Link
+                    href="/dashboard"
+                    className={`flex items-center px-3 py-2 rounded-md text-sm font-medium bg-indigo-100 text-indigo-700`}
+                    >
+                    <Layout className="h-5 w-5 mr-2" />
+                    Dashboard
+                    </Link>
+                </div>
+            }
             <header className="flex justify-end items-center p-4 gap-4 h-16">
                 <SignedOut>
                     <SignInButton />
@@ -70,7 +50,23 @@ export const Navbar = () => {
                     <UserButton />
                 </SignedIn>
             </header>
+          </div>
+          
         </div>
-    </div>
+      </div>
+    </nav>
   );
 };
+
+
+/*
+    <header className="flex justify-end items-center p-4 gap-4 h-16">
+                <SignedOut>
+                    <SignInButton />
+                    <SignUpButton />
+                </SignedOut>
+                <SignedIn>
+                    <UserButton />
+                </SignedIn>
+            </header>
+*/

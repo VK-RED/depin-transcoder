@@ -32,12 +32,12 @@ export default function Page(){
     const uploadVideo = async () => {
 
         if(!uploadUrl){
-            window.alert("Upload URL not found");
+            toast("Upload URL not found");
             return;
         }
 
         if(!file){
-            window.alert("File not found");
+            toast("File not found");
             return;
         }
 

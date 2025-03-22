@@ -18,7 +18,8 @@
     "cors": "^2.8.5",
     "db": "*",
     "express": "^4.21.2",
-    "jsonwebtoken": "^9.0.2"
+    "jsonwebtoken": "^9.0.2",
+    "common": "*"
   },
   "scripts": {
     "start": "bun run src/index.ts"

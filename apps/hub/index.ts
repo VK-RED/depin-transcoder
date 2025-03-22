@@ -231,7 +231,7 @@ const handleTranscodeResult = async (data:TranscodeResult, ws:ServerWebSocket) =
                     processingEndedAt: data.processingEndAt,
                     mp4_360pLink: mp4_360p_link,
                     mp4_480pLink: mp4_480p_link,
-                    status: 'PROCESSED',
+                    status: "PROCESSED",
                 }
             });
 
@@ -259,8 +259,8 @@ const handleTranscodeResult = async (data:TranscodeResult, ws:ServerWebSocket) =
 
 const preSignedUrlHandler = async(key:string) =>{
 
-    const mp4_360p_key = key + "/" + "mp4_360p.mp4";
-    const mp4_480p_key = key + "/" + "mp4_480p.mp4";
+    const mp4_360p_key = key + "/" + "output_360p.mp4";
+    const mp4_480p_key = key + "/" + "output_480p.mp4";
 
     console.log("Getting PreSigned URLs for", mp4_360p_key, mp4_480p_key);
 
