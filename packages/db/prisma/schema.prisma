@@ -57,4 +57,5 @@ model Payout {
   verified    Boolean   @default(false)
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+  txId        String    @unique
 }
