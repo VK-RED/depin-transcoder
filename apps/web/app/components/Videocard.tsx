@@ -40,8 +40,17 @@ export const VideoCard = ({video, setIsExpanded, isExpanded}:VideoCardProps) => 
                     <div className="ml-4">
                         <h3 className="text-lg font-medium text-gray-900">{video.title || "video.mp4"}</h3>
                         <p className="text-sm text-gray-500">Uploaded on {video.createdAt.toString().split("T")[0]}</p>
+                        
                     </div>
                 </div>
+
+                {(video.status === "PROCESSING" || video.status === "PENDING") && <div className="flex items-center gap-2">
+                    <div className="animate-spin h-5 w-5 border-2 border-gray-500 rounded-full border-t-transparent"></div>
+                    <p className="text-sm text-gray-500">
+                        {video.status === "PROCESSING" ? `Please wait while the validator is transcoding your video` : `Please wait a validator will pick up the video to Transcode`}
+                    </p>
+                </div>}
+
                 <div className="flex items-center">
                     {getStatusIcon(video.status)}
                     <span className="ml-2 text-sm capitalize text-gray-700">{video.status}</span>
