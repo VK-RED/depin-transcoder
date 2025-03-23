@@ -1,6 +1,6 @@
 # Depin Video Transcoder
 
-This Project uses bun as the package manager and uses Docker for running Redis
+This Project uses bun as the package manager and uses Docker for running Redis. Solana for sending transactions.
 
 ### Steps to Setup the Project
 - Clone the Project
@@ -33,12 +33,13 @@ This Project uses bun as the package manager and uses Docker for running Redis
 - **NOTE**: To run a Validator your system needs to have ***ffmpeg*** installed to transcode the videos
 - Linux : run `sudo apt update  && sudo apt install ffmpeg` in the terminal.
 - macOS: run `brew install ffmpeg`
-- Windows: visit this https://ffmpeg.org/download.html
+- Windows: go here https://ffmpeg.org/download.html
   
 ##### SETUP
 - Go to apps/validator folder.
 - Run `cp .env.example .env`
 - Replace the PUBLIC_KEY with your Solana Address in the .env file.
+- Replace `HUB_URL="ws://localhost:8081"` incase you're running the hub locally.
 - Run `bun start` in the terminal
 
 ### CONTRIBUTIONS
