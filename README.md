@@ -1,84 +1,45 @@
-# Turborepo starter
+# Depin Video Transcoder
 
-This Turborepo starter is maintained by the Turborepo core team.
+This Project uses bun as the package manager and uses Docker for running Redis
 
-## Using this example
+### Steps to Setup the Project
+- Clone the Project
 
-Run the following command:
+#### DATABASE
+- Go to packages/db folder and run  `cp .env.example .env` in the terminal, replace existing DATABASE_URL in .env file (or) leave it as such if you're running it via Docker.
+- Run `bunx prisma migrate dev` in the terminal, you are good to go !!
 
-```sh
-npx create-turbo@latest
-```
+#### BACKEND
+- Go to apps/backend folder and run `cp .env.example .env`
+- Replace the actual values in the .env file.
+- Start Redis locally or run `docker run -p 3000:3000 redis` in the terminal to start running the Redis.
+- Finally run `bun start` in the terminal to start the backend services. You can see the backend running at http://localhost:8080
 
-## What's inside?
+#### WEB
+- Go to apps/web folder 
+- Run cp .env.example .env in the terminal
+-    Replace the actual values in the .env file.
+- Finally run `bun run dev` in terminal, you can visit the app running at http://localhost:3000
 
-This Turborepo includes the following packages/apps:
+#### HUB
+- Hub is the central manager to  manage the validators.
+- Go to apps/hub folder.
+- Run `cp .env.example .env` and replace the actual values in the .env file.
+- Run `bun start` in the terminal, you can see the WebSocket Server running at ws://localhost:8081
 
-### Apps and Packages
+#### VALIDATOR
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+##### CONFIGURATIONS
+- **NOTE**: To run a Validator your system needs to have ***ffmpeg*** installed to transcode the videos
+- Linux : run `sudo apt update  && sudo apt install ffmpeg` in the terminal.
+- macOS: run `brew install ffmpeg`
+- Windows: visit this https://ffmpeg.org/download.html
+  
+##### SETUP
+- Go to apps/validator folder.
+- Run `cp .env.example .env`
+- Replace the PUBLIC_KEY with your Solana Address in the .env file.
+- Run `bun start` in the terminal
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
-
-### Utilities
-
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-
-### Build
-
-To build all apps and packages, run the following command:
-
-```
-cd my-turborepo
-pnpm build
-```
-
-### Develop
-
-To develop all apps and packages, run the following command:
-
-```
-cd my-turborepo
-pnpm dev
-```
-
-### Remote Caching
-
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
-
-Turborepo can use a technique known as [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
-
-```
-cd my-turborepo
-npx turbo login
-```
-
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-```
-npx turbo link
-```
-
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Tasks](https://turbo.build/repo/docs/core-concepts/monorepos/running-tasks)
-- [Caching](https://turbo.build/repo/docs/core-concepts/caching)
-- [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching)
-- [Filtering](https://turbo.build/repo/docs/core-concepts/monorepos/filtering)
-- [Configuration Options](https://turbo.build/repo/docs/reference/configuration)
-- [CLI Usage](https://turbo.build/repo/docs/reference/command-line-reference)
+### CONTRIBUTIONS
+If you feel an issue or something needs to be fixed , please raise an Issue or a PR. Your contributions are welcomed most !! :pray:
