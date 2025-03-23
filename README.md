@@ -2,6 +2,9 @@
 
 This Project uses bun as the package manager and uses Docker for running Redis. Solana for sending transactions.
 
+### Preview
+https://github.com/user-attachments/assets/d928b667-8bf9-4602-93b7-d5ad31337af6
+
 ### Steps to Setup the Project
 - Clone the Project
 
